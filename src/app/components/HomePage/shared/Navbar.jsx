@@ -100,7 +100,9 @@ const Navbar = () => {
                   {item.title}
                 </a>
               ))}
-
+            </div>
+            {/* Social icons */}
+            <div className="flex justify-center mt-6 lg:flex items-center lg:mt-0">
               <div className="relative mt-4 lg:mt-0 lg:mx-4">
                 <span className="absolute inset-y-0 left-0 flex items-center pl-3">
                   <svg
@@ -123,12 +125,8 @@ const Navbar = () => {
                   placeholder="Search"
                 />
               </div>
-            </div>
-
-            {/* Social icons */}
-            <div className="flex justify-center mt-6 lg:flex items-center lg:mt-0">
               <MdOutlineShoppingCart size={20} />
-              <button className="ml-2.5 p-2 border font-semibold border-white-500 hover:outline-red-500 hover:bg-orange-400 transition duration-500 hover:text-white bg-white text-red-500 rounded-sm text-[14px]">
+              <button className="ml-2.5 p-2 border font-semibold border-white-500 hover:outline-red-500 hover:bg-orange-400 transition duration-500 hover:text-white bg-white text-red-500 rounded-sm text-[14px] cursor-pointer">
                 Appointment
               </button>
             </div>
