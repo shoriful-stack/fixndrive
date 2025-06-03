@@ -1,9 +1,21 @@
+"use client"
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { FaFacebook, FaLinkedin } from "react-icons/fa6";
+import {signIn} from "next-auth/react";
 
 const Page = () => {
+  const handleLogin = async (event) => {
+    event.preventDefault();
+    const email = event.target.email.value;
+    const password = event.target.password.value;
+    const response = await signIn("credentials", {
+      email: email,
+      password: password,
+      redirect: false
+    })
+  }
   return (
     <div className="min-h-screen flex mb-12 mt-6 mx-auto w-9/10">
       {/* Left side */}
@@ -23,7 +35,7 @@ const Page = () => {
             <h2 className="text-3xl font-bold text-gray-900">Login</h2>
           </div>
 
-          <form className="space-y-6">
+          <form className="space-y-6" onSubmit={handleLogin}>
             <div>
               <label
                 htmlFor="email"
