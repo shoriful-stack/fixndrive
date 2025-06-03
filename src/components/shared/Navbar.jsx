@@ -129,9 +129,11 @@ const Navbar = () => {
               <button className="mx-2.5 p-2 border font-semibold border-white-500 hover:outline-red-500 hover:bg-[#FF3811] transition duration-500 hover:text-white bg-white text-red-500 rounded-sm text-[14px] cursor-pointer">
                 Appointment
               </button>
-              <button className="px-5 py-2 hover:outline-red-500 hover:bg-gray-300 transition font-semibold duration-500 hover:text-black bg-[#FF3811] text-white rounded-sm text-[14px] cursor-pointer">
-                Login
-              </button>
+              <Link href={"/login"}>
+                <button className="px-5 py-2 hover:outline-red-500 hover:bg-gray-300 transition font-semibold duration-500 hover:text-black bg-[#FF3811] text-white rounded-sm text-[14px] cursor-pointer">
+                  Login
+                </button>
+              </Link>
             </div>
           </div>
         </div>

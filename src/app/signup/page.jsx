@@ -1,9 +1,30 @@
+"use client"
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { FaFacebook, FaLinkedin } from "react-icons/fa6";
 
 const Page = () => {
+  const handleSignUp  = async (event) => {
+    event.preventDefault();
+    const newUser = {
+      name: event.target.name.value,
+      email: event.target.email.value,
+      password: event.target.password.value
+    }
+    console.log("new user", newUser);
+    const response = await fetch("http://localhost:3000/signup/api", {
+      method: "POST",
+      body: JSON.stringify(newUser),
+      headers: {
+        "content-type": "application/json"
+      }
+    })
+    console.log(response);
+    // if(response.status === 200){
+    //   event.target.reset();
+    // }
+  }
   return (
     <div className="min-h-screen flex mb-12 mt-6 mx-auto w-9/10">
       {/* Left side */}
@@ -18,7 +39,7 @@ const Page = () => {
             <h2 className="text-3xl font-bold text-gray-900">Sign Up</h2>
           </div>
 
-          <form className="space-y-6">
+          <form className="space-y-6" onSubmit={handleSignUp} action="">
             <div>
               <label
                 htmlFor="name"
@@ -56,7 +77,7 @@ const Page = () => {
                 htmlFor="password"
                 className="block text-sm font-medium text-gray-700 mb-2"
               >
-                Confirm Password
+                Password
               </label>
               <input
                 id="password"
