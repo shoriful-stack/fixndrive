@@ -4,8 +4,10 @@ import Link from "next/link";
 import React from "react";
 import { FaFacebook, FaLinkedin } from "react-icons/fa6";
 import {signIn} from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const Page = () => {
+  const router = useRouter();
   const handleLogin = async (event) => {
     event.preventDefault();
     const email = event.target.email.value;
@@ -15,6 +17,9 @@ const Page = () => {
       password: password,
       redirect: false
     })
+    if(response.status === 200){
+      router.push("/")
+    }
   }
   return (
     <div className="min-h-screen flex mb-12 mt-6 mx-auto w-9/10">
