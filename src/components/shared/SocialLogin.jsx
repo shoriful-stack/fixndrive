@@ -1,26 +1,35 @@
-"use client"
+"use client";
 import { signIn, useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import React from "react";
 import { FaFacebook, FaGithub, FaLinkedin } from "react-icons/fa6";
 const SocialLogin = () => {
   const router = useRouter();
   const session = useSession();
   const handleSocialLogin = (provider) => {
-    const response = signIn(provider, {redirect: false})
+    const response = signIn(provider, { redirect: false });
   };
-  if(session.status === "authenticated"){
-    router.push('/')
+  if (session.status === "authenticated") {
+    router.push("/");
   }
   return (
     <div className="mt-6 flex justify-center space-x-4">
-      <button onClick={() => handleSocialLogin("facebook")} className="cursor-pointer w-12 h-12 bg-white border border-gray-300 rounded-lg flex items-center justify-center hover:bg-gray-50 transition duration-200">
+      <button
+        onClick={() => handleSocialLogin("facebook")}
+        className="cursor-pointer w-12 h-12 bg-white border border-gray-300 rounded-lg flex items-center justify-center hover:bg-gray-50 transition duration-200"
+      >
         <FaFacebook className="w-5 h-5 text-blue-600" />
       </button>
-      <button onClick={() => handleSocialLogin("linkedin")}  className="cursor-pointer w-12 h-12 bg-white border border-gray-300 rounded-lg flex items-center justify-center hover:bg-gray-50 transition duration-200">
+      <button
+        onClick={() => handleSocialLogin("linkedin")}
+        className="cursor-pointer w-12 h-12 bg-white border border-gray-300 rounded-lg flex items-center justify-center hover:bg-gray-50 transition duration-200"
+      >
         <FaLinkedin className="w-5 h-5 text-blue-700" />
       </button>
-      <button onClick={() => handleSocialLogin("google")} className="cursor-pointer w-12 h-12 bg-white border border-gray-300 rounded-lg flex items-center justify-center hover:bg-gray-50 transition duration-200">
+      <button
+        onClick={() => handleSocialLogin("google")}
+        className="cursor-pointer w-12 h-12 bg-white border border-gray-300 rounded-lg flex items-center justify-center hover:bg-gray-50 transition duration-200"
+      >
         <svg className="w-5 h-5" viewBox="0 0 24 24">
           <path
             fill="#4285F4"
@@ -40,7 +49,10 @@ const SocialLogin = () => {
           />
         </svg>
       </button>
-      <button onClick={() => handleSocialLogin("github")} className="cursor-pointer w-12 h-12 bg-white border border-gray-300 rounded-lg flex items-center justify-center hover:bg-gray-50 transition duration-200">
+      <button
+        onClick={() => handleSocialLogin("github")}
+        className="cursor-pointer w-12 h-12 bg-white border border-gray-300 rounded-lg flex items-center justify-center hover:bg-gray-50 transition duration-200"
+      >
         <FaGithub className="w-5 h-5" />
       </button>
     </div>
