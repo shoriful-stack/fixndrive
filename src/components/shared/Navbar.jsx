@@ -37,7 +37,14 @@ const Navbar = () => {
         <div className="lg:flex lg:items-center">
           <div className="flex items-center justify-between">
             <Link href={"/"}>
-              <Image alt="logo" src="/assets/logo.svg" width={60} height={60} />
+              <div className="w-[60px] h-[60px] relative">
+                <Image
+                  alt="logo"
+                  src="/assets/logo.svg"
+                  fill
+                  className="object-contain"
+                />
+              </div>
             </Link>
             {/* Mobile menu button */}
             <div className="flex lg:hidden">
@@ -138,7 +145,10 @@ const Navbar = () => {
                   </button>
                 </Link>
               ) : (
-                <button onClick={() => signOut()} className="px-5 py-2 hover:outline-red-500 hover:bg-gray-300 transition font-semibold duration-500 hover:text-black bg-[#FF3811] text-white rounded-sm text-[14px] cursor-pointer">
+                <button
+                  onClick={() => signOut()}
+                  className="px-5 py-2 hover:outline-red-500 hover:bg-gray-300 transition font-semibold duration-500 hover:text-black bg-[#FF3811] text-white rounded-sm text-[14px] cursor-pointer"
+                >
                   Logout
                 </button>
               )}
