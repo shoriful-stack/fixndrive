@@ -3,6 +3,7 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import Swal from "sweetalert2";
 
 const Page = () => {
   const session = useSession();
@@ -18,6 +19,35 @@ const Page = () => {
   useEffect(() => {
     loadBookings();
   }, [session]);
+
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch(`http://localhost:3000/my-bookings/api/delete-booking/${id}`, {
+          method: "DELETE",
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data?.response?.deletedCount > 0) {
+              Swal.fire({
+                title: "Deleted!",
+                text: "Your file has been deleted.",
+                icon: "success",
+              });
+              loadBookings();
+            }
+          });
+      }
+    });
+  };
   return (
     <section className="w-11/12 mx-auto mb-12">
       <div className="relative h-60">
@@ -202,7 +232,10 @@ const Page = () => {
                         </td>
                         <td className="px-2 py-2 text-sm whitespace-nowrap">
                           <div className="flex items-center gap-x-3">
-                            <button className="text-gray-500 transition-colors duration-200 dark:hover:text-red-500 dark:text-gray-300 hover:text-red-500 focus:outline-none">
+                            <button
+                              onClick={() => handleDelete(_id)}
+                              className="text-gray-500 transition-colors duration-200 dark:hover:text-red-500 dark:text-gray-300 hover:text-red-500 focus:outline-none cursor-pointer"
+                            >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
