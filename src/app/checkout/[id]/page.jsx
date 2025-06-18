@@ -1,8 +1,67 @@
+"use client";
+import { getServiceDetails } from "@/service/getServices";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { use } from "react";
+import Swal from "sweetalert2";
 
-const Page = () => {
+const Checkout = ({ params }) => {
+  const { data } = useSession();
+  const { id } = use(params);
+  const [service, setService] = useState({});
+  const loadService = async () => {
+    const details = await getServiceDetails(id);
+    setService(details.service);
+  };
+
+  const { _id, title, price, img } = service || {};
+
+  useEffect(() => {
+    loadService();
+  }, [params]);
+
+  const handleBooking = async (event) => {
+    event.preventDefault();
+    const newBooking = {
+      name: data?.user?.name,
+      email: data?.user?.email,
+      phone: event.target.phone.value,
+      address: event.target.address.value,
+      message: event.target.message.value,
+      date: event.target.date.value,
+      serviceId: _id,
+      serviceTitle: title,
+      servicePrice: price,
+    };
+
+    const response = await fetch(
+      "http://localhost:3000/checkout/api/newBooking",
+      {
+        method: "POST",
+        body: JSON.stringify(newBooking),
+        headers: {
+          content_type: "application/json",
+        },
+      }
+    );
+    if (response.status === 200) {
+      Swal.fire({
+        position: "top",
+        icon: "success",
+        title: "Booked Successfully",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!"
+      });
+    }
+  };
   return (
     <div className="w-11/12 mx-auto mb-12">
       <div className="relative h-60">
@@ -17,7 +76,7 @@ const Page = () => {
         <div className="absolute h-60 w-full left-0 top-0 bg-gradient-to-r from-black/85 via-black/40 to-transparent rounded-lg"></div>
         <div className="flex items-center justify-center">
           <h1 className="text-white text-[32px] absolute h-full left-20 top-0 font-bold flex justify-center items-center">
-            Check Out
+            Check Out {title}
           </h1>
         </div>
         <div className="absolute bottom-0 left-6 md:left-12 lg:right-[530px] lg:left-[450px]">
@@ -43,89 +102,95 @@ const Page = () => {
           </div>
         </div>
       </div>
-      <div>
-        <form onSubmit={handleBooking}>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">Name</span>
-              </label>
-              <input
-                defaultValue={data?.user?.name}
-                type="text"
-                name="name"
-                className="input input-bordered"
-              />
-            </div>
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">Date</span>
-              </label>
-              <input
-                defaultValue={new Date().getDate()}
-                type="date"
-                name="date"
-                className="input input-bordered"
-              />
-            </div>
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">Email</span>
-              </label>
-              <input
-                defaultValue={data?.user?.email}
-                type="text"
-                name="email"
-                placeholder="email"
-                className="input input-bordered"
-              />
-            </div>
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">Due amount</span>
-              </label>
-              <input
-                defaultValue={price}
-                readOnly
-                type="text"
-                name="price"
-                className="input input-bordered"
-              />
-            </div>
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">Phone</span>
-              </label>
-              <input
-                required
-                type="text"
-                name="phone"
-                placeholder="Your Phone"
-                className="input input-bordered"
-              />
-            </div>
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">Present Address</span>
-              </label>
-              <input
-                type="text"
-                name="address"
-                placeholder="Your Address"
-                className="input input-bordered"
-              />
-            </div>
+      <div className="my-20">
+        <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+          <div className="w-full max-w-4xl relative">
+            {/* Form content */}
+            <form className="relative z-10 space-y-6" onSubmit={handleBooking}>
+              {/* First row - Name fields */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <input
+                    type="text"
+                    placeholder="Your Name"
+                    name="name"
+                    defaultValue={data?.user?.name}
+                    className="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent placeholder-gray-400"
+                  />
+                </div>
+                <div>
+                  <input
+                    type="email"
+                    placeholder="Your Email"
+                    name="email"
+                    defaultValue={data?.user?.email}
+                    className="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent placeholder-gray-400"
+                  />
+                </div>
+              </div>
+
+              {/* Second row - Contact fields */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <input
+                    type="tel"
+                    placeholder="Your Phone"
+                    name="phone"
+                    className="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent placeholder-gray-400"
+                  />
+                </div>
+                <div>
+                  <input
+                    type="text"
+                    placeholder="Due Amount"
+                    name="price"
+                    defaultValue={price}
+                    className="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent placeholder-gray-400"
+                  />
+                </div>
+              </div>
+              {/* Third row - Contact fields */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <input
+                    type="text"
+                    placeholder="Present Address"
+                    name="address"
+                    className="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent placeholder-gray-400"
+                  />
+                </div>
+                <div>
+                  <input
+                    type="date"
+                    defaultValue={new Date().toISOString().split("T")[0]}
+                    name="date"
+                    className="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent placeholder-gray-400"
+                  />
+                </div>
+              </div>
+
+              {/* Message field */}
+              <div className="relative">
+                <textarea
+                  placeholder="Your Message"
+                  name="message"
+                  rows={8}
+                  className="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent placeholder-gray-400 resize-none"
+                />
+              </div>
+
+              {/* Submit button */}
+              <button
+                type="submit"
+                className="w-full bg-[#FF3811] hover:bg-red-600 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200"
+              >
+                Order Confirm
+              </button>
+            </form>
           </div>
-          <div className="form-control mt-6">
-            <input
-              className="btn btn-primary btn-block"
-              type="submit"
-              value="Order Confirm"
-            />
-          </div>
-        </form>
+        </div>
       </div>
     </div>
   );
 };
-export default Page;
+export default Checkout;

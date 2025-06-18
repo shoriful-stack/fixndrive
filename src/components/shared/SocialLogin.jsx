@@ -1,7 +1,7 @@
 "use client";
 import { signIn, useSession } from "next-auth/react";
-import { useRouter } from "next/router";
-import React from "react";
+import { useRouter } from "next/navigation";
+import React, { useEffect } from "react";
 import { FaFacebook, FaGithub, FaLinkedin } from "react-icons/fa6";
 const SocialLogin = () => {
   const router = useRouter();
@@ -9,9 +9,12 @@ const SocialLogin = () => {
   const handleSocialLogin = (provider) => {
     const response = signIn(provider, { redirect: false });
   };
-  if (session.status === "authenticated") {
-    router.push("/");
-  }
+
+  useEffect(() => {
+    if (session.status === "authenticated") {
+      router.push("/");
+    }
+  }, [session.status, router]);
   return (
     <div className="mt-6 flex justify-center space-x-4">
       <button
