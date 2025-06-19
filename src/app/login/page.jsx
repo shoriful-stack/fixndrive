@@ -3,11 +3,13 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import {signIn} from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import SocialLogin from "@/components/shared/SocialLogin";
 
 const Page = () => {
-  const router = useRouter();
+  const searchParams = useSearchParams();
+  const path = searchParams.get('redirect');
+
   const handleLogin = async (event) => {
     event.preventDefault();
     const email = event.target.email.value;
@@ -15,11 +17,9 @@ const Page = () => {
     const response = await signIn("credentials", {
       email: email,
       password: password,
-      redirect: false
+      redirect: true,
+      callbackUrl: path ? path : "/"
     })
-    if(response.status === 200){
-      router.push("/")
-    }
   }
   return (
     <div className="min-h-screen flex mb-12 mt-6 mx-auto w-9/10">

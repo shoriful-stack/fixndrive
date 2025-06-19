@@ -1,20 +1,14 @@
 "use client";
-import { signIn, useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import { signIn } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
+import React from "react";
 import { FaFacebook, FaGithub, FaLinkedin } from "react-icons/fa6";
 const SocialLogin = () => {
-  const router = useRouter();
-  const session = useSession();
+  const searchParams = useSearchParams();
+  const path = searchParams.get('redirect');
   const handleSocialLogin = (provider) => {
-    const response = signIn(provider, { redirect: false });
+    const response = signIn(provider, { redirect: true, callbackUrl:  path ? path : "/"});
   };
-
-  useEffect(() => {
-    if (session.status === "authenticated") {
-      router.push("/");
-    }
-  }, [session.status, router]);
   return (
     <div className="mt-6 flex justify-center space-x-4">
       <button
