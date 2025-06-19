@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { use } from "react";
+import Swal from "sweetalert2";
 
 const EditBooking = ({ params }) => {
   const { data } = useSession();
@@ -24,8 +25,33 @@ const EditBooking = ({ params }) => {
     loadBooking();
   }, [params]);
 
-  const handleUpdateBooking = (event) => {
+  const handleUpdateBooking = async (event) => {
     event.preventDefault();
+    const updated = {
+      date: event.target.date.value,
+      phone: event.target.phone.value,
+      address: event.target.address.value,
+      message: event.target.message.value
+    };
+    const response = await fetch(
+      `http://localhost:3000/my-bookings/api/booking/${id}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify(updated),
+        headers: {
+          "content-type": "application/json",
+        },
+      }
+    );
+    if (response.status === 200) {
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Booking Details Updated Successfully!",
+        showConfirmButton: false,
+        timer: 1300,
+      });
+    }
   };
   return (
     <div className="w-11/12 mx-auto mb-12">
