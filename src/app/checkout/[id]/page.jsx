@@ -16,7 +16,7 @@ const Checkout = ({ params }) => {
     setService(details.service);
   };
 
-  const { _id, title, price, img } = service || {};
+  const { _id, title, price } = service || {};
 
   useEffect(() => {
     loadService();
@@ -182,7 +182,7 @@ const Checkout = ({ params }) => {
               {/* Submit button */}
               <button
                 type="submit"
-                className="w-full bg-[#FF3811] hover:bg-red-600 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200"
+                className="w-full bg-[#FF3811] hover:bg-red-600 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 cursor-pointer"
               >
                 Order Confirm
               </button>
